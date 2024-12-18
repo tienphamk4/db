@@ -1,11 +1,19 @@
-const jsonServer = require("json-server"); // importing json-server library
+const jsonServer = require('json-server');
 const server = jsonServer.create();
-const router = jsonServer.router("db.json");
+const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
-const cors = require('cors');  // Import cors library
-const port = process.env.PORT || 8080; //  chose port from here like 8080, 3001
 
 server.use(middlewares);
+server.use(jsonServer.bodyParser);  // Đảm bảo json-server có thể phân tích JSON
+
+// POST endpoint xử lý yêu cầu gửi giỏ hàng
+server.post('/cart', (req, res) => {
+    console.log('Data received:', req.body);  // Kiểm tra xem dữ liệu có đúng không
+    res.status(200).json(req.body);  // Trả lại dữ liệu nhận được
+});
+
+const port = process.env.PORT || 8080;
 server.use(router);
-server.use(cors());
-server.listen(port);
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
